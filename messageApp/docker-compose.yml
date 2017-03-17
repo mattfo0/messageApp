@@ -12,8 +12,30 @@ services:
       - redis-data:/data
     expose:
       - "6379"
+  # log:
+  #   command: '-t XXXXXX-XXXXX-XXXXX-XXXXX'
+  #   image: 'logentries/docker-logentries’
+  #   restart: always
+  #   volumes:
+  #     - '/var/run/docker.sock:/var/run/docker.sock'
+  # Kafka message broker
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    links:
+      - zookeeper:zk
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.99.100
+      KAFKA_CREATE_TOPICS: "DATA:1:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   app:
-    image: message-app:v0.2
+    image: message-app:v0.3
     ports:
       - "8000:80"
     links:
