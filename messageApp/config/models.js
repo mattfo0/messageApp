@@ -11,7 +11,7 @@
 
 module.exports.models = {
 
-  connections: 'sails-mongo',
+  connection: 'mongo',
     migrate: 'safe'
 
   /***************************************************************************
